@@ -6,28 +6,52 @@
     android:orientation="horizontal"
     android:gravity="center_vertical"
     android:paddingStart="16dp"
-    android:paddingEnd="8dp"
-    android:paddingTop="8dp"
-    android:paddingBottom="8dp"
-    android:elevation="8dp">
+    android:paddingEnd="4dp"
+    android:paddingTop="6dp"
+    android:paddingBottom="6dp">
 
-    <!-- Nama Aplikasi -->
+    <!-- Tulisan Exambro -->
     <TextView
-        android:id="@+id/tvAppName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:text="Exambro"
         android:textColor="#FFFFFF"
         android:textSize="18sp"
-        android:textStyle="bold"
-        android:fontFamily="sans-serif-medium" />
+        android:textStyle="bold" />
 
-    <!-- Tombol 3 titik -->
+    <!-- Signal icon (simulasi teks) -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="▌▌▌"
+        android:textColor="#FFFFFF"
+        android:textSize="10sp"
+        android:paddingEnd="6dp" />
+
+    <!-- Baterai icon -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="🔋"
+        android:textSize="13sp"
+        android:paddingEnd="4dp" />
+
+    <!-- Jam realtime -->
+    <TextView
+        android:id="@+id/tvClock"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="12:40"
+        android:textColor="#FFFFFF"
+        android:textSize="14sp"
+        android:paddingEnd="4dp" />
+
+    <!-- Titik tiga -->
     <ImageButton
         android:id="@+id/btnMenu"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:src="@drawable/ic_more_vert"
         android:tint="#FFFFFF"
