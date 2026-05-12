@@ -2,6 +2,7 @@ package com.exambro.overlay
 
 import android.app.*
 import android.content.Intent
+import android.content.res.Resources
 import android.graphics.PixelFormat
 import android.media.MediaPlayer
 import android.os.Build
@@ -27,6 +28,11 @@ class OverlayService : Service() {
     companion object {
         const val CHANNEL_ID = "exambro_overlay_channel"
         const val NOTIFICATION_ID = 101
+
+        // Konversi dp ke pixel
+        fun dpToPx(dp: Int): Int {
+            return (dp * Resources.getSystem().displayMetrics.density).toInt()
+        }
     }
 
     override fun onBind(intent: Intent?): IBinder? = null
@@ -43,7 +49,7 @@ class OverlayService : Service() {
         }, 300)
     }
 
-    private fun makeParams(gravity: Int): WindowManager.LayoutParams {
+    private fun makeParams(gravity: Int, heightDp: Int): WindowManager.LayoutParams {
         val type = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
             WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
         else
@@ -52,10 +58,11 @@ class OverlayService : Service() {
 
         return WindowManager.LayoutParams(
             WindowManager.LayoutParams.MATCH_PARENT,
-            WindowManager.LayoutParams.WRAP_CONTENT,
+            dpToPx(heightDp), // tinggi fixed dalam pixel
             type,
             WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL or
-                    WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN,
+                    WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN or
+                    WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
             PixelFormat.TRANSLUCENT
         ).apply {
             this.gravity = gravity
@@ -65,20 +72,18 @@ class OverlayService : Service() {
     private fun showHeader() {
         try {
             headerView = LayoutInflater.from(this).inflate(R.layout.overlay_header, null)
-            windowManager.addView(headerView, makeParams(Gravity.TOP))
+            // Header 40dp di atas
+            windowManager.addView(headerView, makeParams(Gravity.TOP, 40))
 
-            // Update jam setiap detik
             val tvClock = headerView!!.findViewById<TextView>(R.id.tvClock)
             val clockRunnable = object : Runnable {
                 override fun run() {
-                    val fmt = SimpleDateFormat("HH:mm", Locale.getDefault())
-                    tvClock.text = fmt.format(Date())
-                    clockHandler.postDelayed(this, 30000) // update tiap 30 detik
+                    tvClock.text = SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date())
+                    clockHandler.postDelayed(this, 30000)
                 }
             }
             clockHandler.post(clockRunnable)
 
-            // Tombol titik tiga
             headerView!!.findViewById<ImageButton>(R.id.btnMenu).setOnClickListener { view ->
                 val popup = PopupMenu(this, view)
                 popup.menu.add(0, 1, 0, "Matikan Overlay")
@@ -95,7 +100,8 @@ class OverlayService : Service() {
     private fun showFooter() {
         try {
             footerView = LayoutInflater.from(this).inflate(R.layout.overlay_footer, null)
-            windowManager.addView(footerView, makeParams(Gravity.BOTTOM))
+            // Footer 40dp di bawah
+            windowManager.addView(footerView, makeParams(Gravity.BOTTOM, 40))
 
             footerView!!.findViewById<TextView>(R.id.btnBack).setOnClickListener {
                 Toast.makeText(this, "Gunakan tombol back hardware", Toast.LENGTH_SHORT).show()
