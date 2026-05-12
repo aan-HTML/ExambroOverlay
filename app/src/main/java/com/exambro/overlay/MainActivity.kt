@@ -4,6 +4,8 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.provider.Settings
 import android.widget.Button
 import android.widget.Toast
@@ -23,7 +25,6 @@ class MainActivity : AppCompatActivity() {
 
         btnToggle.setOnClickListener {
             if (!Settings.canDrawOverlays(this)) {
-                // Minta permission overlay
                 val intent = Intent(
                     Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
                     Uri.parse("package:$packageName")
@@ -54,7 +55,11 @@ class MainActivity : AppCompatActivity() {
             startService(intent)
         }
         Toast.makeText(this, "Overlay aktif!", Toast.LENGTH_SHORT).show()
-        // Minimize app supaya Chrome bisa dibuka
-        moveTaskToBack(true)
+
+        // FIX: Delay moveTaskToBack agar windowManager.addView() sempat render dulu
+        // Tanpa delay ini, di Android 12+ overlay sering tidak muncul
+        Handler(Looper.getMainLooper()).postDelayed({
+            moveTaskToBack(true)
+        }, 500)
     }
 }
