@@ -17,7 +17,7 @@
         android:textSize="13sp"
         android:textStyle="bold"
         android:gravity="center"
-        android:background="?attr/selectableItemBackground" />
+        android:background="#00000000" />
 
     <View
         android:layout_width="1dp"
@@ -35,7 +35,7 @@
         android:textSize="13sp"
         android:textStyle="bold"
         android:gravity="center"
-        android:background="?attr/selectableItemBackground" />
+        android:background="#00000000" />
 
     <View
         android:layout_width="1dp"
@@ -53,7 +53,7 @@
         android:textSize="13sp"
         android:textStyle="bold"
         android:gravity="center"
-        android:background="?attr/selectableItemBackground" />
+        android:background="#00000000" />
 
     <View
         android:layout_width="1dp"
@@ -71,6 +71,6 @@
         android:textSize="13sp"
         android:textStyle="bold"
         android:gravity="center"
-        android:background="?attr/selectableItemBackground" />
+        android:background="#00000000" />
 
 </LinearLayout>
