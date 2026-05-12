@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#4CAF50"
+    android:orientation="horizontal"
+    android:gravity="center"
+    android:elevation="8dp">
+
+    <!-- BACK -->
+    <Button
+        android:id="@+id/btnBack"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:layout_weight="1"
+        android:text="BACK"
+        android:textColor="#FFFFFF"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        android:background="@drawable/btn_footer_selector"
+        android:gravity="center" />
+
+    <!-- Divider -->
+    <View
+        android:layout_width="1dp"
+        android:layout_height="28dp"
+        android:background="#FFFFFF"
+        android:alpha="0.4"/>
+
+    <!-- EXIT -->
+    <Button
+        android:id="@+id/btnExit"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:layout_weight="1"
+        android:text="EXIT"
+        android:textColor="#FFFFFF"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        android:background="@drawable/btn_footer_selector"
+        android:gravity="center" />
+
+    <!-- Divider -->
+    <View
+        android:layout_width="1dp"
+        android:layout_height="28dp"
+        android:background="#FFFFFF"
+        android:alpha="0.4"/>
+
+    <!-- REFRESH -->
+    <Button
+        android:id="@+id/btnRefresh"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:layout_weight="1"
+        android:text="REFRESH"
+        android:textColor="#FFFFFF"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        android:background="@drawable/btn_footer_selector"
+        android:gravity="center" />
+
+    <!-- Divider -->
+    <View
+        android:layout_width="1dp"
+        android:layout_height="28dp"
+        android:background="#FFFFFF"
+        android:alpha="0.4"/>
+
+    <!-- FORWARD -->
+    <Button
+        android:id="@+id/btnForward"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:layout_weight="1"
+        android:text="FORWARD"
+        android:textColor="#FFFFFF"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        android:background="@drawable/btn_footer_selector"
+        android:gravity="center" />
+
+</LinearLayout>
