@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="40dp"
+    android:layout_height="48dp"
     android:orientation="horizontal">
 
-    <!-- BACK #20906c -->
+    <!-- BACK #20916d -->
     <TextView
         android:id="@+id/btnBack"
         android:layout_width="0dp"
@@ -12,17 +12,17 @@
         android:layout_weight="1"
         android:text="BACK"
         android:textColor="#FFFFFF"
-        android:textSize="12sp"
+        android:textSize="13sp"
         android:textStyle="bold"
         android:gravity="center"
-        android:background="#20906c" />
+        android:background="#20916d" />
 
     <View
         android:layout_width="1dp"
         android:layout_height="match_parent"
         android:background="#80FFFFFF" />
 
-    <!-- EXIT #0c8e24 -->
+    <!-- EXIT #10912c -->
     <TextView
         android:id="@+id/btnExit"
         android:layout_width="0dp"
@@ -30,17 +30,17 @@
         android:layout_weight="1"
         android:text="EXIT"
         android:textColor="#FFFFFF"
-        android:textSize="12sp"
+        android:textSize="13sp"
         android:textStyle="bold"
         android:gravity="center"
-        android:background="#0c8e24" />
+        android:background="#10912c" />
 
     <View
         android:layout_width="1dp"
         android:layout_height="match_parent"
         android:background="#80FFFFFF" />
 
-    <!-- REFRESH #117922 -->
+    <!-- REFRESH #0e761d -->
     <TextView
         android:id="@+id/btnRefresh"
         android:layout_width="0dp"
@@ -48,17 +48,17 @@
         android:layout_weight="1"
         android:text="REFRESH"
         android:textColor="#FFFFFF"
-        android:textSize="12sp"
+        android:textSize="13sp"
         android:textStyle="bold"
         android:gravity="center"
-        android:background="#117922" />
+        android:background="#0e761d" />
 
     <View
         android:layout_width="1dp"
         android:layout_height="match_parent"
         android:background="#80FFFFFF" />
 
-    <!-- FORWARD #117922 -->
+    <!-- FORWARD #20916d -->
     <TextView
         android:id="@+id/btnForward"
         android:layout_width="0dp"
@@ -66,9 +66,9 @@
         android:layout_weight="1"
         android:text="FORWARD"
         android:textColor="#FFFFFF"
-        android:textSize="12sp"
+        android:textSize="13sp"
         android:textStyle="bold"
         android:gravity="center"
-        android:background="#117922" />
+        android:background="#20916d" />
 
 </LinearLayout>
