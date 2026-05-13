@@ -2,15 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.exambro.overlay">
 
-    <!-- Permission wajib untuk overlay -->
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
-    <!-- Wajib untuk Foreground Service -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-    <!--
-        FIX BUG 1: Wajib di Android 14 (targetSdk 34).
-        Tanpa ini, startForeground() crash → overlay tidak pernah muncul.
-    -->
+    <!-- FIX: Wajib Android 14 (targetSdk 34) -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
+    <!-- FIX: Wajib Android 13+ agar notifikasi foreground service muncul -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
         android:allowBackup="true"
@@ -20,7 +17,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ExambroOverlay">
 
-        <!-- Main Activity -->
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -30,12 +26,7 @@
             </intent-filter>
         </activity>
 
-        <!--
-            FIX BUG 1: Tambah android:foregroundServiceType="specialUse"
-            WAJIB untuk targetSdk 34 (Android 14+).
-            Tanpa ini startForeground() throw ForegroundServiceStartNotAllowedException
-            → service crash → overlay tidak muncul.
-        -->
+        <!-- FIX: foregroundServiceType wajib targetSdk 34 -->
         <service
             android:name=".OverlayService"
             android:exported="false"
