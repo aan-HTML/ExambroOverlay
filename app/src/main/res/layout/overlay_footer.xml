@@ -1,74 +1,101 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<!--
+    overlay_footer.xml  –  Exambro-style footer
+    ✔ Warna    : #4CAF50  (sama dengan Exambro asli)
+    ✔ Font     : 13sp bold  (naik dari 12sp agar lebih mirip Exambro)
+    ✔ Tinggi   : 50dp per tombol  (naik dari 48dp)
+    ✔ Nav bar  : paddingBottom diset programmatic dari OverlayService
+                 supaya footer MENUTUPI navigasi bawaan HP
+-->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/footerRoot"
     android:layout_width="match_parent"
-    android:layout_height="48dp"
-    android:orientation="horizontal">
+    android:layout_height="wrap_content"
+    android:background="#4CAF50"
+    android:orientation="horizontal"
+    android:gravity="center"
+    android:elevation="8dp">
 
-    <!-- BACK #20916d -->
-    <TextView
+    <!-- BACK -->
+    <Button
         android:id="@+id/btnBack"
         android:layout_width="0dp"
-        android:layout_height="match_parent"
+        android:layout_height="50dp"
         android:layout_weight="1"
         android:text="BACK"
         android:textColor="#FFFFFF"
         android:textSize="13sp"
         android:textStyle="bold"
+        android:fontFamily="sans-serif-medium"
+        android:background="@drawable/btn_footer_selector"
         android:gravity="center"
-        android:background="#20916d" />
+        android:letterSpacing="0.05" />
 
+    <!-- Divider -->
     <View
         android:layout_width="1dp"
-        android:layout_height="match_parent"
-        android:background="#80FFFFFF" />
+        android:layout_height="30dp"
+        android:background="#FFFFFF"
+        android:alpha="0.35" />
 
-    <!-- EXIT #10912c -->
-    <TextView
+    <!-- EXIT -->
+    <Button
         android:id="@+id/btnExit"
         android:layout_width="0dp"
-        android:layout_height="match_parent"
+        android:layout_height="50dp"
         android:layout_weight="1"
         android:text="EXIT"
         android:textColor="#FFFFFF"
         android:textSize="13sp"
         android:textStyle="bold"
+        android:fontFamily="sans-serif-medium"
+        android:background="@drawable/btn_footer_selector"
         android:gravity="center"
-        android:background="#10912c" />
+        android:letterSpacing="0.05" />
 
+    <!-- Divider -->
     <View
         android:layout_width="1dp"
-        android:layout_height="match_parent"
-        android:background="#80FFFFFF" />
+        android:layout_height="30dp"
+        android:background="#FFFFFF"
+        android:alpha="0.35" />
 
-    <!-- REFRESH #0e761d -->
-    <TextView
+    <!-- REFRESH -->
+    <Button
         android:id="@+id/btnRefresh"
         android:layout_width="0dp"
-        android:layout_height="match_parent"
+        android:layout_height="50dp"
         android:layout_weight="1"
         android:text="REFRESH"
         android:textColor="#FFFFFF"
         android:textSize="13sp"
         android:textStyle="bold"
+        android:fontFamily="sans-serif-medium"
+        android:background="@drawable/btn_footer_selector"
         android:gravity="center"
-        android:background="#0e761d" />
+        android:letterSpacing="0.05" />
 
+    <!-- Divider -->
     <View
         android:layout_width="1dp"
-        android:layout_height="match_parent"
-        android:background="#80FFFFFF" />
+        android:layout_height="30dp"
+        android:background="#FFFFFF"
+        android:alpha="0.35" />
 
-    <!-- FORWARD #20916d -->
-    <TextView
+    <!-- FORWARD -->
+    <Button
         android:id="@+id/btnForward"
         android:layout_width="0dp"
-        android:layout_height="match_parent"
+        android:layout_height="50dp"
         android:layout_weight="1"
         android:text="FORWARD"
         android:textColor="#FFFFFF"
         android:textSize="13sp"
         android:textStyle="bold"
+        android:fontFamily="sans-serif-medium"
+        android:background="@drawable/btn_footer_selector"
         android:gravity="center"
-        android:background="#20916d" />
+        android:letterSpacing="0.05" />
 
 </LinearLayout>

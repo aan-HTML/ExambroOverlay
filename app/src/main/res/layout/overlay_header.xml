@@ -1,15 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<!--
+    overlay_header.xml  –  Exambro-style header
+    ✔ Warna  : #4CAF50  (sama dengan Exambro asli)
+    ✔ Font   : sans-serif-medium, bold, 18sp  (sama)
+    ✔ Tinggi : 56dp total  (padding 8dp atas-bawah + konten 40dp)
+    ✔ Tambah : tampilan JAM di kanan  (seperti Exambro asli)
+-->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="48dp"
-    android:background="#279360"
+    android:layout_height="56dp"
+    android:background="#4CAF50"
     android:orientation="horizontal"
     android:gravity="center_vertical"
-    android:paddingStart="14dp"
-    android:paddingEnd="2dp">
+    android:paddingStart="16dp"
+    android:paddingEnd="4dp"
+    android:elevation="8dp">
 
-    <!-- Tulisan Exambro -->
+    <!-- Nama Aplikasi (kiri) -->
     <TextView
+        android:id="@+id/tvAppName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
@@ -17,41 +27,29 @@
         android:textColor="#FFFFFF"
         android:textSize="18sp"
         android:textStyle="bold"
+        android:fontFamily="sans-serif-medium"
         android:letterSpacing="0.01" />
 
-    <!-- Icon Sinyal -->
-    <ImageView
-        android:layout_width="18dp"
-        android:layout_height="18dp"
-        android:src="@drawable/ic_signal"
-        android:layout_marginEnd="6dp" />
-
-    <!-- Icon Baterai -->
-    <ImageView
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:src="@drawable/ic_battery"
-        android:layout_marginEnd="5dp" />
-
-    <!-- Jam realtime -->
+    <!-- Jam digital (kanan) – diupdate tiap detik dari OverlayService -->
     <TextView
         android:id="@+id/tvClock"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="12:40"
+        android:text="00:00"
         android:textColor="#FFFFFF"
         android:textSize="14sp"
-        android:layout_marginEnd="2dp" />
+        android:textStyle="bold"
+        android:fontFamily="sans-serif-medium"
+        android:paddingEnd="4dp" />
 
-    <!-- Titik tiga -->
+    <!-- Tombol 3 titik (kanan) -->
     <ImageButton
         android:id="@+id/btnMenu"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:background="@android:color/transparent"
+        android:background="?attr/selectableItemBackgroundBorderless"
         android:src="@drawable/ic_more_vert"
         android:tint="#FFFFFF"
-        android:contentDescription="Menu"
-        android:padding="8dp" />
+        android:contentDescription="Menu" />
 
 </LinearLayout>
