@@ -77,4 +77,3 @@ Format yang didukung: `.mp3`, `.wav`, `.ogg`
 | REFRESH | Info toast |
 | FORWARD | Info toast |
 
-> Untuk BACK/REFRESH/FORWARD aktif penuh, perlu upgrade ke Opsi B (AccessibilityService)
