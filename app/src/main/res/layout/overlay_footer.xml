@@ -1,12 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-    overlay_footer.xml  –  Exambro-style footer
-    ✔ Warna    : #4CAF50  (sama dengan Exambro asli)
-    ✔ Font     : 13sp bold  (naik dari 12sp agar lebih mirip Exambro)
-    ✔ Tinggi   : 50dp per tombol  (naik dari 48dp)
-    ✔ Nav bar  : paddingBottom diset programmatic dari OverlayService
-                 supaya footer MENUTUPI navigasi bawaan HP
--->
+
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/footerRoot"

@@ -6,6 +6,11 @@
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <!-- Wajib untuk Foreground Service -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <!--
+        FIX BUG 1: Wajib di Android 14 (targetSdk 34).
+        Tanpa ini, startForeground() crash → overlay tidak pernah muncul.
+    -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
 
     <application
         android:allowBackup="true"
@@ -25,10 +30,16 @@
             </intent-filter>
         </activity>
 
-        <!-- Overlay Service — tanpa foregroundServiceType agar kompatibel Android 10+ -->
+        <!--
+            FIX BUG 1: Tambah android:foregroundServiceType="specialUse"
+            WAJIB untuk targetSdk 34 (Android 14+).
+            Tanpa ini startForeground() throw ForegroundServiceStartNotAllowedException
+            → service crash → overlay tidak muncul.
+        -->
         <service
             android:name=".OverlayService"
-            android:exported="false" />
+            android:exported="false"
+            android:foregroundServiceType="specialUse" />
 
     </application>
 

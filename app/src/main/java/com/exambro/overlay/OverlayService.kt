@@ -12,9 +12,9 @@ import android.view.*
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.LinearLayout
-import android.widget.PopupMenu
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.widget.PopupMenu
 import androidx.core.app.NotificationCompat
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -25,6 +25,10 @@ class OverlayService : Service() {
     private lateinit var windowManager: WindowManager
     private var headerView: View? = null
     private var footerView: View? = null
+
+    // FIX BUG 2: mediaPlayer sebagai instance variable agar tidak di-GC
+    // saat suara sedang dimainkan.
+    private var mediaPlayer: MediaPlayer? = null
 
     // Handler untuk update jam di header tiap detik
     private val clockHandler = Handler(Looper.getMainLooper())
@@ -48,10 +52,10 @@ class OverlayService : Service() {
         createNotificationChannel()
         startForeground(NOTIFICATION_ID, buildNotification())
         showOverlay()
-        clockHandler.post(clockRunnable) // Mulai update jam
+        clockHandler.post(clockRunnable)
     }
 
-    // ─── Tampilkan Header + Footer ────────────────────────────────────────────
+    // Tampilkan Header + Footer
 
     private fun showOverlay() {
         showHeader()
@@ -78,7 +82,8 @@ class OverlayService : Service() {
             gravity = Gravity.TOP
         }
 
-        // Tombol titik tiga → menu popup
+        // FIX BUG 3: Pakai androidx.appcompat.widget.PopupMenu (bukan android.widget.PopupMenu)
+        // agar tidak crash di OEM ROM yang memerlukan Activity window token.
         val btnMenu = headerView!!.findViewById<ImageButton>(R.id.btnMenu)
         btnMenu.setOnClickListener { view ->
             val popup = PopupMenu(this, view)
@@ -99,7 +104,6 @@ class OverlayService : Service() {
         val inflater = LayoutInflater.from(this)
         footerView = inflater.inflate(R.layout.overlay_footer, null)
 
-        // ── KUNCI: FLAG_LAYOUT_NO_LIMITS agar footer bisa menutupi nav bar HP ──
         val params = WindowManager.LayoutParams(
             WindowManager.LayoutParams.MATCH_PARENT,
             WindowManager.LayoutParams.WRAP_CONTENT,
@@ -111,7 +115,7 @@ class OverlayService : Service() {
             WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or
                     WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL or
                     WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN or
-                    WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, // ← INI KUNCINYA
+                    WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
             PixelFormat.TRANSLUCENT
         ).apply {
             gravity = Gravity.BOTTOM
@@ -119,13 +123,10 @@ class OverlayService : Service() {
 
         windowManager.addView(footerView, params)
 
-        // Tambah padding bawah = tinggi nav bar → tombol naik ke atas nav bar,
-        // tapi background hijau tetap MENUTUPI nav bar bawaan HP
         val navBarHeight = getNavigationBarHeight()
         val footerRoot = footerView!!.findViewById<LinearLayout>(R.id.footerRoot)
         footerRoot.setPadding(0, 0, 0, navBarHeight)
 
-        // ── Aksi tombol ─────────────────────────────────────────────────────
         val btnBack    = footerView!!.findViewById<Button>(R.id.btnBack)
         val btnExit    = footerView!!.findViewById<Button>(R.id.btnExit)
         val btnRefresh = footerView!!.findViewById<Button>(R.id.btnRefresh)
@@ -148,7 +149,7 @@ class OverlayService : Service() {
         }
     }
 
-    // ─── Update Jam di Header ─────────────────────────────────────────────────
+    // Update Jam di Header
 
     private fun updateClock() {
         val tvClock = headerView?.findViewById<TextView>(R.id.tvClock) ?: return
@@ -156,12 +157,7 @@ class OverlayService : Service() {
         tvClock.text = timeFormat.format(Date())
     }
 
-    // ─── Tinggi Navigation Bar HP ─────────────────────────────────────────────
-    //
-    //  Cara kerja:
-    //   - Android menyimpan dimensi nav bar di resource "navigation_bar_height"
-    //   - Kalau HP pakai gesture navigation (swipe), nilai ini bisa 0 → aman
-    //   - Kalau HP pakai 3-tombol nav bar, nilai ini ~48–56dp → footer menutupinya
+    // Tinggi Navigation Bar HP
 
     private fun getNavigationBarHeight(): Int {
         val resourceId = resources.getIdentifier(
@@ -170,32 +166,48 @@ class OverlayService : Service() {
         return if (resourceId > 0) resources.getDimensionPixelSize(resourceId) else 0
     }
 
-    // ─── Stop Overlay + Mainkan Bunyi ────────────────────────────────────────
+    // Stop Overlay + Mainkan Bunyi
 
     private fun stopOverlayWithSound() {
-        clockHandler.removeCallbacks(clockRunnable) // Stop update jam
+        clockHandler.removeCallbacks(clockRunnable)
+
+        // FIX BUG 2: Simpan ke instance variable `mediaPlayer` bukan local variable.
+        // Local variable bisa di-GC sebelum suara selesai → suara terpotong / tidak bunyi.
         try {
-            val mediaPlayer = MediaPlayer.create(this, R.raw.exit_sound)
+            mediaPlayer = MediaPlayer.create(this, R.raw.exit_sound)
             mediaPlayer?.setOnCompletionListener { mp ->
                 mp.release()
+                mediaPlayer = null
                 stopSelf()
             }
-            mediaPlayer?.start() ?: stopSelf()
+            // Jika MediaPlayer.create() gagal (return null), langsung stopSelf()
+            if (mediaPlayer != null) {
+                mediaPlayer!!.start()
+            } else {
+                stopSelf()
+            }
         } catch (e: Exception) {
+            mediaPlayer = null
             stopSelf()
         }
     }
 
-    // ─── Hapus View saat Service Mati ────────────────────────────────────────
+    // Hapus View saat Service Mati
 
     override fun onDestroy() {
         super.onDestroy()
         clockHandler.removeCallbacks(clockRunnable)
-        headerView?.let { windowManager.removeView(it) }
-        footerView?.let { windowManager.removeView(it) }
+        // FIX BUG 2: Release mediaPlayer jika masih ada (misal service di-kill paksa)
+        mediaPlayer?.let {
+            if (it.isPlaying) it.stop()
+            it.release()
+            mediaPlayer = null
+        }
+        headerView?.let { windowManager.removeView(it); headerView = null }
+        footerView?.let { windowManager.removeView(it); footerView = null }
     }
 
-    // ─── Notification (wajib untuk Foreground Service) ───────────────────────
+    // Notification (untuk Foreground Service)
 
     private fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

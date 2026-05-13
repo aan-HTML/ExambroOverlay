@@ -1,11 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-    overlay_header.xml  –  Exambro-style header
-    ✔ Warna  : #4CAF50  (sama dengan Exambro asli)
-    ✔ Font   : sans-serif-medium, bold, 18sp  (sama)
-    ✔ Tinggi : 56dp total  (padding 8dp atas-bawah + konten 40dp)
-    ✔ Tambah : tampilan JAM di kanan  (seperti Exambro asli)
--->
+
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
