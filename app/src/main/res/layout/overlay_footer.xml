@@ -1,94 +1,132 @@
 <?xml version="1.0" encoding="utf-8"?>
-
+<!--
+    overlay_footer.xml – Exambro-style footer
+    - BACK & FORWARD: background #1a8c3a (lebih gelap)
+    - EXIT & REFRESH : background #22a24a (sama dengan footer)
+    - Divider: rgba(255,255,255,0.2)
+    - Teks: 13sp bold, ALL CAPS, letter-spacing 0.8, putih
+    - paddingBottom diset programmatic dari OverlayService (navigation bar height)
+-->
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/footerRoot"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#4CAF50"
-    android:orientation="horizontal"
-    android:gravity="center"
+    android:background="#22a24a"
+    android:orientation="vertical"
     android:elevation="8dp">
 
-    <!-- BACK -->
-    <Button
-        android:id="@+id/btnBack"
-        android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:layout_weight="1"
-        android:text="BACK"
-        android:textColor="#FFFFFF"
-        android:textSize="13sp"
-        android:textStyle="bold"
-        android:fontFamily="sans-serif-medium"
-        android:background="@drawable/btn_footer_selector"
-        android:gravity="center"
-        android:letterSpacing="0.05" />
+    <!-- Row tombol -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
-    <!-- Divider -->
+        <!-- BACK (#1a8c3a) -->
+        <Button
+            android:id="@+id/btnBack"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="BACK"
+            android:textColor="#FFFFFF"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            android:fontFamily="sans-serif-medium"
+            android:letterSpacing="0.08"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:background="@drawable/btn_bg_dark_green"
+            android:gravity="center"
+            android:textAllCaps="true"
+            android:insetTop="0dp"
+            android:insetBottom="0dp" />
+
+        <!-- Divider -->
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="#33FFFFFF" />
+
+        <!-- EXIT (#22a24a) -->
+        <Button
+            android:id="@+id/btnExit"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="EXIT"
+            android:textColor="#FFFFFF"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            android:fontFamily="sans-serif-medium"
+            android:letterSpacing="0.08"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:background="@drawable/btn_bg_green"
+            android:gravity="center"
+            android:textAllCaps="true"
+            android:insetTop="0dp"
+            android:insetBottom="0dp" />
+
+        <!-- Divider -->
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="#33FFFFFF" />
+
+        <!-- REFRESH (#22a24a) -->
+        <Button
+            android:id="@+id/btnRefresh"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="REFRESH"
+            android:textColor="#FFFFFF"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            android:fontFamily="sans-serif-medium"
+            android:letterSpacing="0.08"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:background="@drawable/btn_bg_green"
+            android:gravity="center"
+            android:textAllCaps="true"
+            android:insetTop="0dp"
+            android:insetBottom="0dp" />
+
+        <!-- Divider -->
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="#33FFFFFF" />
+
+        <!-- FORWARD (#1a8c3a) -->
+        <Button
+            android:id="@+id/btnForward"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="FORWARD"
+            android:textColor="#FFFFFF"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            android:fontFamily="sans-serif-medium"
+            android:letterSpacing="0.08"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:background="@drawable/btn_bg_dark_green"
+            android:gravity="center"
+            android:textAllCaps="true"
+            android:insetTop="0dp"
+            android:insetBottom="0dp" />
+
+    </LinearLayout>
+
+    <!-- Placeholder navigation bar — tingginya diset programmatic dari OverlayService -->
     <View
-        android:layout_width="1dp"
-        android:layout_height="30dp"
-        android:background="#FFFFFF"
-        android:alpha="0.35" />
-
-    <!-- EXIT -->
-    <Button
-        android:id="@+id/btnExit"
-        android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:layout_weight="1"
-        android:text="EXIT"
-        android:textColor="#FFFFFF"
-        android:textSize="13sp"
-        android:textStyle="bold"
-        android:fontFamily="sans-serif-medium"
-        android:background="@drawable/btn_footer_selector"
-        android:gravity="center"
-        android:letterSpacing="0.05" />
-
-    <!-- Divider -->
-    <View
-        android:layout_width="1dp"
-        android:layout_height="30dp"
-        android:background="#FFFFFF"
-        android:alpha="0.35" />
-
-    <!-- REFRESH -->
-    <Button
-        android:id="@+id/btnRefresh"
-        android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:layout_weight="1"
-        android:text="REFRESH"
-        android:textColor="#FFFFFF"
-        android:textSize="13sp"
-        android:textStyle="bold"
-        android:fontFamily="sans-serif-medium"
-        android:background="@drawable/btn_footer_selector"
-        android:gravity="center"
-        android:letterSpacing="0.05" />
-
-    <!-- Divider -->
-    <View
-        android:layout_width="1dp"
-        android:layout_height="30dp"
-        android:background="#FFFFFF"
-        android:alpha="0.35" />
-
-    <!-- FORWARD -->
-    <Button
-        android:id="@+id/btnForward"
-        android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:layout_weight="1"
-        android:text="FORWARD"
-        android:textColor="#FFFFFF"
-        android:textSize="13sp"
-        android:textStyle="bold"
-        android:fontFamily="sans-serif-medium"
-        android:background="@drawable/btn_footer_selector"
-        android:gravity="center"
-        android:letterSpacing="0.05" />
+        android:id="@+id/viewNavBar"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="#22a24a" />
 
 </LinearLayout>

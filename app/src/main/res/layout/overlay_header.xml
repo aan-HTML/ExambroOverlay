@@ -1,49 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
-
+<!--
+    overlay_header.xml – Exambro-style header
+    FIX: Hapus ?attr/selectableItemBackgroundBorderless (line 50 sebelumnya)
+         yang crash saat inflate dari Service context karena tidak ada Activity theme.
+         Diganti @android:color/transparent.
+-->
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="56dp"
-    android:background="#4CAF50"
-    android:orientation="horizontal"
-    android:gravity="center_vertical"
-    android:paddingStart="16dp"
-    android:paddingEnd="4dp"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
     android:elevation="8dp">
 
-    <!-- Nama Aplikasi (kiri) -->
-    <TextView
-        android:id="@+id/tvAppName"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="Exambro"
-        android:textColor="#FFFFFF"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:fontFamily="sans-serif-medium"
-        android:letterSpacing="0.01" />
+    <!--
+        Status bar custom background #1a7a3c
+        Tingginya 0dp di sini, diset programmatic dari OverlayService
+        sesuai getStatusBarHeight() agar pas di semua device.
+    -->
+    <View
+        android:id="@+id/viewStatusBar"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="#1a7a3c" />
 
-    <!-- Jam digital (kanan) – diupdate tiap detik dari OverlayService -->
-    <TextView
-        android:id="@+id/tvClock"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="00:00"
-        android:textColor="#FFFFFF"
-        android:textSize="14sp"
-        android:textStyle="bold"
-        android:fontFamily="sans-serif-medium"
-        android:paddingEnd="4dp" />
+    <!-- Actual header bar – min 52dp, background #22a24a -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:background="#22a24a"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingStart="16dp"
+        android:paddingEnd="4dp">
 
-    <!-- Tombol 3 titik (kanan) -->
-    <ImageButton
-        android:id="@+id/btnMenu"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:src="@drawable/ic_more_vert"
-        android:tint="#FFFFFF"
-        android:contentDescription="Menu" />
+        <!-- Nama app (kiri), semibold 18sp putih -->
+        <TextView
+            android:id="@+id/tvAppName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Exambro"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:fontFamily="sans-serif-medium" />
+
+        <!-- Ikon sinyal -->
+        <ImageView
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:src="@drawable/ic_signal"
+            android:contentDescription="Signal"
+            android:layout_marginEnd="6dp" />
+
+        <!-- Ikon baterai -->
+        <ImageView
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:src="@drawable/ic_battery"
+            android:contentDescription="Battery"
+            android:layout_marginEnd="8dp" />
+
+        <!-- Jam digital, diupdate tiap detik dari OverlayService -->
+        <TextView
+            android:id="@+id/tvClock"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="00:00"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:fontFamily="sans-serif-medium"
+            android:paddingEnd="2dp" />
+
+        
+        <ImageButton
+            android:id="@+id/btnMenu"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_more_vert"
+            android:tint="#FFFFFF"
+            android:contentDescription="Menu" />
+
+    </LinearLayout>
 
 </LinearLayout>

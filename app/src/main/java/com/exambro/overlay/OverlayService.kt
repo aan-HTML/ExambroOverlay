@@ -12,7 +12,6 @@ import android.os.Looper
 import android.view.*
 import android.widget.Button
 import android.widget.ImageButton
-import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.widget.PopupMenu
@@ -47,16 +46,13 @@ class OverlayService : Service() {
 
     override fun onCreate() {
         super.onCreate()
-        // DIAGNOSTIC: Jika toast ini muncul → service berhasil start
         Toast.makeText(this, "[DBG] Service onCreate", Toast.LENGTH_SHORT).show()
 
         windowManager = getSystemService(WINDOW_SERVICE) as WindowManager
         createNotificationChannel()
 
-        // FIX: Android 14 (API 34) WAJIB pakai startForeground 3 parameter
-        // dengan serviceType yang cocok dengan foregroundServiceType di manifest.
-        // Pakai 2 parameter saja akan throw MissingForegroundServiceTypeException.
         try {
+            // FIX: Android 14 wajib pakai 3 parameter dengan serviceType
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
                 startForeground(
                     NOTIFICATION_ID,
@@ -66,10 +62,8 @@ class OverlayService : Service() {
             } else {
                 startForeground(NOTIFICATION_ID, buildNotification())
             }
-            // DIAGNOSTIC: Jika toast ini muncul → startForeground berhasil
             Toast.makeText(this, "[DBG] startForeground OK", Toast.LENGTH_SHORT).show()
         } catch (e: Exception) {
-            // DIAGNOSTIC: Jika toast ini muncul → startForeground gagal, lihat pesannya
             Toast.makeText(this, "[DBG] startForeground GAGAL: ${e.message}", Toast.LENGTH_LONG).show()
             stopSelf()
             return
@@ -77,6 +71,19 @@ class OverlayService : Service() {
 
         showOverlay()
         clockHandler.post(clockRunnable)
+    }
+
+    // ─── Helper: tinggi status bar & nav bar ─────────────────────────────────
+
+    private fun getStatusBarHeight(): Int {
+        val resourceId = resources.getIdentifier("status_bar_height", "dimen", "android")
+        return if (resourceId > 0) resources.getDimensionPixelSize(resourceId) else
+            (24 * resources.displayMetrics.density).toInt()
+    }
+
+    private fun getNavigationBarHeight(): Int {
+        val resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android")
+        return if (resourceId > 0) resources.getDimensionPixelSize(resourceId) else 0
     }
 
     // ─── Tampilkan Header + Footer ────────────────────────────────────────────
@@ -91,6 +98,15 @@ class OverlayService : Service() {
             val inflater = LayoutInflater.from(this)
             headerView = inflater.inflate(R.layout.overlay_header, null)
 
+            // Set tinggi status bar placeholder (#1a7a3c) sesuai device
+            val statusBarHeight = getStatusBarHeight()
+            val viewStatusBar = headerView!!.findViewById<View>(R.id.viewStatusBar)
+            val sbParams = viewStatusBar.layoutParams
+            sbParams.height = statusBarHeight
+            viewStatusBar.layoutParams = sbParams
+
+            // WindowManager params header:
+            // FLAG_LAYOUT_IN_SCREEN + FLAG_LAYOUT_NO_LIMITS → overlay menutupi status bar
             val params = WindowManager.LayoutParams(
                 WindowManager.LayoutParams.MATCH_PARENT,
                 WindowManager.LayoutParams.WRAP_CONTENT,
@@ -101,13 +117,15 @@ class OverlayService : Service() {
                     WindowManager.LayoutParams.TYPE_PHONE,
                 WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or
                         WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL or
-                        WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN,
+                        WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN or
+                        WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
                 PixelFormat.TRANSLUCENT
             ).apply {
                 gravity = Gravity.TOP
+                y = 0
             }
 
-            // FIX: Pakai androidx PopupMenu agar tidak crash di Service context
+            // FIX: Ganti ?attr/ dengan @android:color/transparent → tidak crash di Service context
             val btnMenu = headerView!!.findViewById<ImageButton>(R.id.btnMenu)
             btnMenu.setOnClickListener { view ->
                 val popup = PopupMenu(this, view)
@@ -122,11 +140,9 @@ class OverlayService : Service() {
             }
 
             windowManager.addView(headerView, params)
-            // DIAGNOSTIC: Jika toast ini muncul → header berhasil ditampilkan
             Toast.makeText(this, "[DBG] Header OK", Toast.LENGTH_SHORT).show()
 
         } catch (e: Exception) {
-            // DIAGNOSTIC: Jika toast ini muncul → header gagal, lihat pesannya
             Toast.makeText(this, "[DBG] Header GAGAL: ${e.message}", Toast.LENGTH_LONG).show()
         }
     }
@@ -135,6 +151,13 @@ class OverlayService : Service() {
         try {
             val inflater = LayoutInflater.from(this)
             footerView = inflater.inflate(R.layout.overlay_footer, null)
+
+            // Set tinggi nav bar placeholder agar footer menutupi navigation bar bawaan
+            val navBarHeight = getNavigationBarHeight()
+            val viewNavBar = footerView!!.findViewById<View>(R.id.viewNavBar)
+            val nbParams = viewNavBar.layoutParams
+            nbParams.height = navBarHeight
+            viewNavBar.layoutParams = nbParams
 
             val params = WindowManager.LayoutParams(
                 WindowManager.LayoutParams.MATCH_PARENT,
@@ -151,13 +174,8 @@ class OverlayService : Service() {
                 PixelFormat.TRANSLUCENT
             ).apply {
                 gravity = Gravity.BOTTOM
+                y = 0
             }
-
-            windowManager.addView(footerView, params)
-
-            val navBarHeight = getNavigationBarHeight()
-            val footerRoot = footerView!!.findViewById<LinearLayout>(R.id.footerRoot)
-            footerRoot.setPadding(0, 0, 0, navBarHeight)
 
             val btnBack    = footerView!!.findViewById<Button>(R.id.btnBack)
             val btnExit    = footerView!!.findViewById<Button>(R.id.btnExit)
@@ -175,11 +193,10 @@ class OverlayService : Service() {
                 Toast.makeText(this, "Gunakan gesture Chrome untuk forward", Toast.LENGTH_SHORT).show()
             }
 
-            // DIAGNOSTIC: Jika toast ini muncul → footer berhasil ditampilkan
+            windowManager.addView(footerView, params)
             Toast.makeText(this, "[DBG] Footer OK", Toast.LENGTH_SHORT).show()
 
         } catch (e: Exception) {
-            // DIAGNOSTIC: Jika toast ini muncul → footer gagal, lihat pesannya
             Toast.makeText(this, "[DBG] Footer GAGAL: ${e.message}", Toast.LENGTH_LONG).show()
         }
     }
@@ -192,17 +209,11 @@ class OverlayService : Service() {
         tvClock.text = timeFormat.format(Date())
     }
 
-    private fun getNavigationBarHeight(): Int {
-        val resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android")
-        return if (resourceId > 0) resources.getDimensionPixelSize(resourceId) else 0
-    }
-
     // ─── Stop Overlay + Mainkan Bunyi ────────────────────────────────────────
 
     private fun stopOverlayWithSound() {
         clockHandler.removeCallbacks(clockRunnable)
         try {
-            // FIX: Simpan ke instance variable agar tidak di-GC saat playing
             mediaPlayer = MediaPlayer.create(this, R.raw.exit_sound)
             if (mediaPlayer != null) {
                 mediaPlayer!!.setOnCompletionListener { mp ->
@@ -225,7 +236,6 @@ class OverlayService : Service() {
     override fun onDestroy() {
         super.onDestroy()
         clockHandler.removeCallbacks(clockRunnable)
-        // FIX: Release mediaPlayer jika service di-kill paksa
         mediaPlayer?.let {
             if (it.isPlaying) it.stop()
             it.release()
